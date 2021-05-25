@@ -111,8 +111,7 @@ class BaseSubscriptionServer(object):
             "request_string": payload.get("query"),
             "variable_values": payload.get("variables"),
             "operation_name": payload.get("operationName"),
-            "context_value": context,
-            "executor": self.graphql_executor(),
+            "context_value": context
         }
 
     def on_open(self, connection_context):

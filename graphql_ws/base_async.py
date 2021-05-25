@@ -4,8 +4,6 @@ from abc import ABC, abstractmethod
 from types import CoroutineType, GeneratorType
 from typing import Any, Dict, List, Union
 from weakref import WeakSet
-
-from graphql.execution.executors.asyncio import AsyncioExecutor
 from promise import Promise
 
 from graphql_ws import base
@@ -109,8 +107,6 @@ class BaseAsyncConnectionContext(base.BaseConnectionContext, ABC):
 
 
 class BaseAsyncSubscriptionServer(base.BaseSubscriptionServer, ABC):
-    graphql_executor = AsyncioExecutor
-
     def __init__(self, schema, keep_alive=True, loop=None):
         self.loop = loop
         super().__init__(schema, keep_alive)

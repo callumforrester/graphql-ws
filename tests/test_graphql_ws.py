@@ -6,7 +6,7 @@ except ImportError:
     import mock
 
 import pytest
-from graphql.execution.executors.sync import SyncExecutor
+from graphql import graphql_sync, GraphQLError
 
 from graphql_ws import base, base_sync, constants
 
@@ -138,7 +138,6 @@ def test_get_graphql_params(ss, cc):
         "context": {},
     }
     params = ss.get_graphql_params(cc, payload)
-    assert isinstance(params.pop("executor"), SyncExecutor)
     assert params == {
         "request_string": "req",
         "variable_values": "vars",
@@ -177,12 +176,14 @@ def test_send_execution_result(ss):
 def test_execution_result_to_dict(ss):
     result = mock.Mock()
     result.data = "DATA"
-    result.errors = "ER"
+    result.errors = [GraphQLError("E"), GraphQLError("R")]
     result_dict = ss.execution_result_to_dict(result)
     assert isinstance(result_dict, OrderedDict)
     assert result_dict == {
         "data": "DATA",
-        "errors": [{"message": "E"}, {"message": "R"}],
+        "errors": [
+            {"locations": None, "message": "E", "path": None}, 
+            {"locations": None, "message": "R", "path": None}],
     }
 
 
